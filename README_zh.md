@@ -23,7 +23,7 @@ Obsidian 插件，专为移动设备设计，提供相机拍照和二维码扫�
 1. 下载或克隆此仓库
 2. 运行 `npm install` 安装依赖
 3. 运行 `npm run build` 构建插件
-4. 将 `main.js` 和 `manifest.json` 复制到你的 vault 的 `.obsidian/plugins/mobile-camera/` 目录
+4. 将 `main.js` 和 `manifest.json` 复制到你的 vault 的 `.obsidian/plugins/mobile-camera-qr-plugin/` 目录
 5. 在 Obsidian 设置中启用插件
 
 ### 方法 2：开发模式
