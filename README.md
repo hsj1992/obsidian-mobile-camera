@@ -41,13 +41,63 @@ The plugin provides three commands:
 2. **Camera: Take Photo** - Directly enter photo mode
 3. **Camera: Scan QR Code** - Directly enter QR code scanning mode
 
-### Steps to Use
+### Quick Start
 
 1. Open a note
 2. Search for the above commands in the command palette, or pin command shortcuts in the mobile toolbar for quick access
 3. Choose to take a photo or scan a QR code
 4. After taking a photo, the image will be automatically saved and inserted into the note
 5. After successfully scanning a QR code, the content will be automatically inserted into the note
+
+### Use Case Examples
+
+#### 📝 Daily Journal with Photos
+
+**Scenario**: Quickly add photos to your daily notes
+
+1. Open today's daily note
+2. Tap the camera command (pin it to toolbar for quick access)
+3. Take a photo of your meal, workspace, or anything noteworthy
+4. Photo is automatically inserted with `![[image.jpg]]` syntax
+
+**Tip**: Enable "Direct import" in settings for fastest workflow
+
+#### 📦 Product Documentation
+
+**Scenario**: Document products with QR codes and photos
+
+1. Create a note for the product
+2. Use "Scan QR Code" to capture product information
+3. Use "Take Photo" to capture product images
+4. All content is automatically inserted into your note
+
+**Tip**: Disable "Direct import" to rename photos with descriptive names
+
+#### 🎫 Event Collection
+
+**Scenario**: Collect QR codes from tickets, business cards, or posters
+
+1. Create a collection note (e.g., "Conference 2024")
+2. Use "Scan QR Code" command repeatedly
+3. Each QR code content is inserted as text
+4. Add your own notes between scans
+
+**Tip**: The modal stays open after failed scans, so you can retry immediately
+
+#### 📚 Research Notes
+
+**Scenario**: Capture book pages, whiteboards, or documents
+
+1. Open your research note
+2. Use "Take Photo" to capture content
+3. Photos are saved in `{notepath}/image` by default
+4. Organize by customizing the save folder path
+
+**Tip**: Use `{notepath}/attachments` to keep photos organized by note location
+
+---
+
+For more advanced usage, see the [Advanced Guide](docs/advanced.md).
 
 ## Configuration Options
 
