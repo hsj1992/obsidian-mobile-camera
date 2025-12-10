@@ -4,21 +4,19 @@
     "inlineSourceMap": true,
     "inlineSources": true,
     "module": "ESNext",
-    "target": "ES6",
-    "allowJs": true,
-    "noImplicitAny": true,
+    "target": "ES2018",
+    "allowJs": false,
+    "strict": true,
     "moduleResolution": "node",
     "importHelpers": true,
     "isolatedModules": true,
-    "strictNullChecks": true,
-    "lib": [
-      "DOM",
-      "ES5",
-      "ES6",
-      "ES7"
-    ]
+    "lib": ["DOM", "ESNext"],
+    "types": ["node", "obsidian"],
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "useDefineForClassFields": false
   },
-  "include": [
-    "**/*.ts"
-  ]
+  "include": ["**/*.ts"],
+  "exclude": ["node_modules", "dist", ".obsidian"]
 }

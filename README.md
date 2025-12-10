@@ -1,94 +1,123 @@
-# Obsidian Sample Plugin
+# Mobile Camera & QR Scanner Plugin for Obsidian
 
-This is a sample plugin for Obsidian (https://obsidian.md).
+[中文文档](README_zh.md)
 
-This project uses TypeScript to provide type checking and documentation.
-The repo depends on the latest plugin API (obsidian.d.ts) in TypeScript Definition format, which contains TSDoc comments describing what it does.
+An Obsidian plugin designed for mobile devices, providing camera photo capture and QR code scanning functionality.
 
-This sample plugin demonstrates some of the basic functionality the plugin API can do.
-- Adds a ribbon icon, which shows a Notice when clicked.
-- Adds a command "Open Sample Modal" which opens a Modal.
-- Adds a plugin setting tab to the settings page.
-- Registers a global click event and output 'click' to the console.
-- Registers a global interval which logs 'setInterval' to the console.
+## Features
 
-## First time developing plugins?
+- 📷 **Take Photos**: Use the rear camera to take photos and insert them into notes
+- 🔍 **Scan QR Codes**: Scan QR codes and insert the content into notes
+- 📁 **Flexible Storage**: Support for custom save path templates
+- ✏️ **File Naming**: Optional file rename prompt
+- 📱 **Mobile Only**: Currently supports Android devices
 
-Quick starting guide for new plugin devs:
+## Screenshots
 
-- Check if [someone already developed a plugin for what you want](https://obsidian.md/plugins)! There might be an existing plugin similar enough that you can partner up with.
-- Make a copy of this repo as a template with the "Use this template" button (login to GitHub if you don't see it).
-- Clone your repo to a local development folder. For convenience, you can place this folder in your `.obsidian/plugins/your-plugin-name` folder.
-- Install NodeJS, then run `npm i` in the command line under your repo folder.
-- Run `npm run dev` to compile your plugin from `main.ts` to `main.js`.
-- Make changes to `main.ts` (or create new `.ts` files). Those changes should be automatically compiled into `main.js`.
-- Reload Obsidian to load the new version of your plugin.
-- Enable plugin in settings window.
-- For updates to the Obsidian API run `npm update` in the command line under your repo folder.
+<!-- Add screenshots/GIFs/videos here to demonstrate the plugin in action -->
 
-## Releasing new releases
+## Installation
 
-- Update your `manifest.json` with your new version number, such as `1.0.1`, and the minimum Obsidian version required for your latest release.
-- Update your `versions.json` file with `"new-plugin-version": "minimum-obsidian-version"` so older versions of Obsidian can download an older version of your plugin that's compatible.
-- Create new GitHub release using your new version number as the "Tag version". Use the exact version number, don't include a prefix `v`. See here for an example: https://github.com/obsidianmd/obsidian-sample-plugin/releases
-- Upload the files `manifest.json`, `main.js`, `styles.css` as binary attachments. Note: The manifest.json file must be in two places, first the root path of your repository and also in the release.
-- Publish the release.
+### Method 1: Manual Installation
 
-> You can simplify the version bump process by running `npm version patch`, `npm version minor` or `npm version major` after updating `minAppVersion` manually in `manifest.json`.
-> The command will bump version in `manifest.json` and `package.json`, and add the entry for the new version to `versions.json`
+1. Download or clone this repository
+2. Run `npm install` to install dependencies
+3. Run `npm run build` to build the plugin
+4. Copy `main.js` and `manifest.json` to your vault's `.obsidian/plugins/mobile-camera/` directory
+5. Enable the plugin in Obsidian settings
 
-## Adding your plugin to the community plugin list
+### Method 2: Development Mode
 
-- Check the [plugin guidelines](https://docs.obsidian.md/Plugins/Releasing/Plugin+guidelines).
-- Publish an initial version.
-- Make sure you have a `README.md` file in the root of your repo.
-- Make a pull request at https://github.com/obsidianmd/obsidian-releases to add your plugin.
+1. Clone this repository to your vault's `.obsidian/plugins/` directory
+2. Run `npm install`
+3. Run `npm run dev` to start development mode (auto-watch for file changes)
+4. Enable the plugin in Obsidian settings
 
-## How to use
+## Usage
 
-- Clone this repo.
-- Make sure your NodeJS is at least v16 (`node --version`).
-- `npm i` or `yarn` to install dependencies.
-- `npm run dev` to start compilation in watch mode.
+The plugin provides three commands:
 
-## Manually installing the plugin
+1. **Camera: Main Menu** - Open the main menu to choose between taking a photo or scanning a QR code
+2. **Camera: Take Photo** - Directly enter photo mode
+3. **Camera: Scan QR Code** - Directly enter QR code scanning mode
 
-- Copy over `main.js`, `styles.css`, `manifest.json` to your vault `VaultFolder/.obsidian/plugins/your-plugin-id/`.
+### Steps to Use
 
-## Improve code quality with eslint (optional)
-- [ESLint](https://eslint.org/) is a tool that analyzes your code to quickly find problems. You can run ESLint against your plugin to find common bugs and ways to improve your code. 
-- To use eslint with this project, make sure to install eslint from terminal:
-  - `npm install -g eslint`
-- To use eslint to analyze this project use this command:
-  - `eslint main.ts`
-  - eslint will then create a report with suggestions for code improvement by file and line number.
-- If your source code is in a folder, such as `src`, you can use eslint with this command to analyze all files in that folder:
-  - `eslint ./src/`
+1. Open a note
+2. Search for the above commands in the command palette, or pin command shortcuts in the mobile toolbar for quick access
+3. Choose to take a photo or scan a QR code
+4. After taking a photo, the image will be automatically saved and inserted into the note
+5. After successfully scanning a QR code, the content will be automatically inserted into the note
 
-## Funding URL
+## Configuration Options
 
-You can include funding URLs where people who use your plugin can financially support it.
+You can configure the following in the plugin settings:
 
-The simple way is to set the `fundingUrl` field to your link in your `manifest.json` file:
+- **Save folder**: Photo save path template
+  - Default: `{notepath}/image`
+  - `{notepath}` will be replaced with the current note's directory
+  - Examples: `Camera` or `{notepath}/attachments`
 
-```json
-{
-    "fundingUrl": "https://buymeacoffee.com"
-}
+- **Direct import**: Whether to import directly
+  - Enabled: Photos are saved directly after capture, using a timestamp as the filename
+  - Disabled: Prompt for a filename after taking a photo
+
+## Privacy & Permissions
+
+### Permissions
+
+- **Camera Permission**: This plugin requires access to the device camera to take photos and scan QR codes
+- When first used, Android will request camera permission; please allow it to use this plugin
+
+### Privacy Policy
+
+This plugin highly values your privacy:
+
+- ✅ **Local Storage**: All photos and scan results are saved only in your local Obsidian vault
+- ✅ **No Network Activity**: This plugin does not send data to any external servers
+- ✅ **No Data Collection**: No usage data or analytics are collected
+- ✅ **No Telemetry**: No tracking or statistics code is included
+- ✅ **Open Source Transparency**: All code is publicly available for review
+
+Your photos and data are completely under your control and never leave your device.
+
+## Tech Stack
+
+- TypeScript
+- Obsidian API
+- jsQR - QR code decoding library
+- esbuild - Fast build tool
+- Web APIs (File Input with camera capture)
+
+## Development
+
+```bash
+# Install dependencies
+npm install
+
+# Development mode (auto-watch for file changes)
+npm run dev
+
+# Production build
+npm run build
 ```
 
-If you have multiple URLs, you can also do:
+## Build Notes
 
-```json
-{
-    "fundingUrl": {
-        "Buy Me a Coffee": "https://buymeacoffee.com",
-        "GitHub Sponsor": "https://github.com/sponsors",
-        "Patreon": "https://www.patreon.com/"
-    }
-}
-```
+This project uses esbuild as the build tool, which is faster and lighter than traditional Rollup or Webpack.
 
-## API Documentation
+- Development mode generates code with sourcemaps for easier debugging
+- Production mode performs code minification and tree-shaking optimization
 
-See https://github.com/obsidianmd/obsidian-api
+## QR Code Scanning
+
+The plugin uses a dual strategy for QR code scanning:
+
+1. Prioritizes the native `BarcodeDetector` API (if the browser supports it)
+2. Falls back to the jsQR library for multi-scale image processing
+
+This ensures optimal compatibility and performance across different devices.
+
+## License
+
+MIT

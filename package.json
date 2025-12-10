@@ -1,24 +1,37 @@
 {
-	"name": "obsidian-sample-plugin",
+	"name": "mobile-camera",
 	"version": "1.0.0",
-	"description": "This is a sample plugin for Obsidian (https://obsidian.md)",
-	"main": "main.js",
+	"description": "A third-party Obsidian plugin that lets you take photos and scan QR codes on mobile devices, then insert them into notes.",
+	"main": "dist/main.js",
 	"scripts": {
-		"dev": "node esbuild.config.mjs",
-		"build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
+		"dev": "node esbuild.config.mjs && cp dist/main.js main.js",
+		"build": "tsc -noEmit && node esbuild.config.mjs production && cp dist/main.js main.js",
 		"version": "node version-bump.mjs && git add manifest.json versions.json"
 	},
-	"keywords": [],
-	"author": "",
+	"keywords": [
+		"obsidian",
+		"plugin",
+		"mobile",
+		"android",
+		"camera",
+		"qr"
+	],
+	"author": "hsj1992",
 	"license": "MIT",
+	"engines": {
+		"node": ">=18"
+	},
 	"devDependencies": {
-		"@types/node": "^16.11.6",
-		"@typescript-eslint/eslint-plugin": "5.29.0",
-		"@typescript-eslint/parser": "5.29.0",
+		"@types/node": "^18.0.0",
+		"@typescript-eslint/eslint-plugin": "^6.0.0",
+		"@typescript-eslint/parser": "^6.0.0",
 		"builtin-modules": "3.3.0",
-		"esbuild": "0.17.3",
+		"esbuild": "^0.27.1",
 		"obsidian": "latest",
 		"tslib": "2.4.0",
-		"typescript": "4.7.4"
+		"typescript": "^5.3.0"
+	},
+	"dependencies": {
+		"jsqr": "^1.4.0"
 	}
 }
