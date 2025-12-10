@@ -1,7 +1,7 @@
 {
 	"name": "mobile-camera",
 	"version": "1.0.0",
-	"description": "A third-party Obsidian plugin that lets you take photos and scan QR codes on mobile devices, then insert them into notes.",
+	"description": "A third-party Obsidian plugin that lets you take photos and capture QR codes on mobile devices, then insert them into notes.",
 	"main": "dist/main.js",
 	"scripts": {
 		"dev": "node esbuild.config.mjs && cp dist/main.js main.js",

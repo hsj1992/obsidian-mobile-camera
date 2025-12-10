@@ -37,7 +37,7 @@ export default class AndroidCameraPlugin extends Plugin {
 
 		this.addCommand({
 			id: 'camera-scan-qr',
-			name: 'Camera: Scan QR Code',
+			name: 'Camera: Capture QR Code',
 			icon: 'scan',
 			callback: () => new CameraModal(this.app, this.settings, 'qr').open()
 		});

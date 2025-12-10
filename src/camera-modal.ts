@@ -31,24 +31,13 @@ export class CameraModal extends Modal {
 		contentEl.empty();
 
 		if (this.initialAction) {
-			contentEl.style.display = 'none';
 			this.createFileInputs(contentEl);
 			const target = this.initialAction === 'photo' ? this.fileInputCapture : this.fileInputQr;
-			target.click();
-
-			// If click is blocked (e.g., gesture requirement), restore UI after a short delay
-			setTimeout(() => {
-				if (!this.fileInputCapture.value && !this.fileInputQr.value) {
-					contentEl.style.display = '';
-					contentEl.addClass('camera-modal-overlay');
-					this.createActionButtons(contentEl);
-				}
-			}, 150);
+			setTimeout(() => target.click(), 0);
 			return;
 		}
 
 		contentEl.addClass('camera-modal-overlay');
-
 		this.createFileInputs(contentEl);
 		this.createActionButtons(contentEl);
 	}
@@ -69,6 +58,9 @@ export class CameraModal extends Modal {
 		this.fileInputCapture.multiple = false;
 		this.fileInputCapture.style.display = 'none';
 		this.fileInputCapture.addEventListener('change', (e) => this.handleFileSelected(e));
+		this.fileInputCapture.addEventListener('cancel', () => {
+			if (this.initialAction) this.close();
+		});
 
 		this.fileInputQr = container.createEl('input', { type: 'file' }) as HTMLInputElement;
 		this.fileInputQr.accept = 'image/*';
@@ -76,13 +68,16 @@ export class CameraModal extends Modal {
 		this.fileInputQr.multiple = false;
 		this.fileInputQr.style.display = 'none';
 		this.fileInputQr.addEventListener('change', (e) => this.handleQrSelected(e));
+		this.fileInputQr.addEventListener('cancel', () => {
+			if (this.initialAction) this.close();
+		});
 	}
 
 	private createActionButtons(container: HTMLElement) {
 		const actionBar = container.createDiv({ cls: 'camera-action-bar' });
 
 		this.createButton(actionBar, 'Take Photo', () => this.fileInputCapture.click(), true);
-		this.createButton(actionBar, 'Scan QR Code', () => this.fileInputQr.click(), true);
+		this.createButton(actionBar, 'Capture QR Code', () => this.fileInputQr.click(), true);
 		this.createButton(actionBar, 'Cancel', () => this.close(), false);
 	}
 
@@ -154,28 +149,21 @@ export class CameraModal extends Modal {
 
 			if (decoded) {
 				this.insertText(decoded + '\n');
-				new Notice('QR scanned');
+				new Notice('QR code recognized');
 				this.close();
 			} else {
-				new Notice('No QR code found. Please try again.');
-				if (this.initialAction) {
-					this.contentEl.style.display = '';
-					this.contentEl.addClass('camera-modal-overlay');
-					this.createActionButtons(this.contentEl);
-				}
+				new Notice('No QR code found in photo. Please try again.');
+				this.close();
 			}
 		} catch (err) {
-			console.error('obsidian-mobile-camera: Failed to scan QR code', err);
+			console.error('obsidian-mobile-camera: Failed to recognize QR code', err);
 			const errorMsg = err instanceof Error ? err.message : 'Unknown error';
-			new Notice(`Failed to scan QR code: ${errorMsg}`);
-			if (this.initialAction) {
-				this.contentEl.style.display = '';
-				this.contentEl.addClass('camera-modal-overlay');
-				this.createActionButtons(this.contentEl);
-			}
+			new Notice(`Failed to recognize QR code: ${errorMsg}`);
+			this.close();
 		} finally {
 			input.value = '';
 		}
 	}
+
 
 }

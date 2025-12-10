@@ -2,12 +2,12 @@
 
 [中文文档](README_zh.md)
 
-An Obsidian plugin designed for mobile devices, providing camera photo capture and QR code scanning functionality.
+An Obsidian plugin designed for mobile devices, providing camera photo capture and QR code recognition functionality.
 
 ## Features
 
 - 📷 **Take Photos**: Use the rear camera to take photos and insert them into notes
-- 🔍 **Scan QR Codes**: Scan QR codes and insert the content into notes
+- 🔍 **Capture QR Codes**: Take photos of QR codes and insert the recognized content into notes
 - 📁 **Flexible Storage**: Support for custom save path templates
 - ✏️ **File Naming**: Optional file rename prompt
 - 📱 **Mobile Only**: Currently supports Android devices (iOS support is not yet implemented)
@@ -37,17 +37,17 @@ An Obsidian plugin designed for mobile devices, providing camera photo capture a
 
 The plugin provides three commands:
 
-1. **Camera: Main Menu** - Open the main menu to choose between taking a photo or scanning a QR code
+1. **Camera: Main Menu** - Open the main menu to choose between taking a photo or capturing a QR code
 2. **Camera: Take Photo** - Directly enter photo mode
-3. **Camera: Scan QR Code** - Directly enter QR code scanning mode
+3. **Camera: Capture QR Code** - Directly take a photo to recognize QR code
 
 ### Quick Start
 
 1. Open a note
 2. Search for the above commands in the command palette, or pin command shortcuts in the mobile toolbar for quick access
-3. Choose to take a photo or scan a QR code
+3. Choose to take a photo or capture a QR code
 4. After taking a photo, the image will be automatically saved and inserted into the note
-5. After successfully scanning a QR code, the content will be automatically inserted into the note
+5. After capturing a QR code photo, the recognized content will be automatically inserted into the note
 
 ### Use Case Examples
 
@@ -67,7 +67,7 @@ The plugin provides three commands:
 **Scenario**: Document products with QR codes and photos
 
 1. Create a note for the product
-2. Use "Scan QR Code" to capture product information
+2. Use "Capture QR Code" to take a photo and recognize product information
 3. Use "Take Photo" to capture product images
 4. All content is automatically inserted into your note
 
@@ -78,11 +78,9 @@ The plugin provides three commands:
 **Scenario**: Collect QR codes from tickets, business cards, or posters
 
 1. Create a collection note (e.g., "Conference 2024")
-2. Use "Scan QR Code" command repeatedly
-3. Each QR code content is inserted as text
-4. Add your own notes between scans
-
-**Tip**: The modal stays open after failed scans, so you can retry immediately
+2. Use "Capture QR Code" command repeatedly
+3. Each recognized QR code content is inserted as text
+4. Add your own notes between captures
 
 #### 📚 Research Notes
 
@@ -116,14 +114,14 @@ You can configure the following in the plugin settings:
 
 ### Permissions
 
-- **Camera Permission**: This plugin requires access to the device camera to take photos and scan QR codes
+- **Camera Permission**: This plugin requires access to the device camera to take photos and capture QR codes
 - When first used, Android will request camera permission; please allow it to use this plugin
 
 ### Privacy Policy
 
 This plugin highly values your privacy:
 
-- ✅ **Local Storage**: All photos and scan results are saved only in your local Obsidian vault
+- ✅ **Local Storage**: All photos and recognized QR code content are saved only in your local Obsidian vault
 - ✅ **No Network Activity**: This plugin does not send data to any external servers
 - ✅ **No Data Collection**: No usage data or analytics are collected
 - ✅ **No Telemetry**: No tracking or statistics code is included
@@ -159,9 +157,9 @@ This project uses esbuild as the build tool, which is faster and lighter than tr
 - Development mode generates code with sourcemaps for easier debugging
 - Production mode performs code minification and tree-shaking optimization
 
-## QR Code Scanning
+## QR Code Recognition
 
-The plugin uses a dual strategy for QR code scanning:
+The plugin uses a dual strategy for QR code recognition from photos:
 
 1. Prioritizes the native `BarcodeDetector` API (if the browser supports it)
 2. Falls back to the jsQR library for multi-scale image processing

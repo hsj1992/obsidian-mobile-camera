@@ -3,7 +3,7 @@
 	"name": "Mobile Camera & QR Scanner",
 	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
-	"description": "A third-party Obsidian plugin that lets you take photos and scan QR codes on mobile devices, then insert them into notes.",
+	"description": "A third-party Obsidian plugin that lets you take photos and capture QR codes on mobile devices, then insert them into notes.",
 	"author": "hsj1992",
 	"isDesktopOnly": false
 }
