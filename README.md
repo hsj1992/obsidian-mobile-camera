@@ -10,7 +10,7 @@ An Obsidian plugin designed for mobile devices, providing camera photo capture a
 - 🔍 **Scan QR Codes**: Scan QR codes and insert the content into notes
 - 📁 **Flexible Storage**: Support for custom save path templates
 - ✏️ **File Naming**: Optional file rename prompt
-- 📱 **Mobile Only**: Currently supports Android devices
+- 📱 **Mobile Only**: Currently supports Android devices (iOS support is not yet implemented)
 
 ## Screenshots
 
