@@ -18,7 +18,15 @@ An Obsidian plugin designed for mobile devices, providing camera photo capture a
 
 ## Installation
 
-### Method 1: Manual Installation
+### Method 1: From Release (Recommended)
+
+1. Go to the [Releases](https://github.com/hsj1992/obsidian-mobile-camera/releases) page
+2. Download the latest release files (`main.js`, `manifest.json`, and `styles.css` if available)
+3. Create a folder named `mobile-camera-qr-plugin` in your vault's `.obsidian/plugins/` directory
+4. Copy the downloaded files into the `mobile-camera-qr-plugin` folder
+5. Reload Obsidian and enable the plugin in Settings → Community plugins
+
+### Method 2: Manual Build
 
 1. Download or clone this repository
 2. Run `npm install` to install dependencies
@@ -26,7 +34,7 @@ An Obsidian plugin designed for mobile devices, providing camera photo capture a
 4. Copy `main.js` and `manifest.json` to your vault's `.obsidian/plugins/mobile-camera-qr-plugin/` directory
 5. Enable the plugin in Obsidian settings
 
-### Method 2: Development Mode
+### Method 3: Development Mode
 
 1. Clone this repository to your vault's `.obsidian/plugins/` directory
 2. Run `npm install`
