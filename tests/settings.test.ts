@@ -8,11 +8,10 @@ describe('Settings', () => {
 		});
 
 		it('should be immutable', () => {
-			const original = { ...DEFAULT_SETTINGS };
-			DEFAULT_SETTINGS.directImport = false;
-			expect(DEFAULT_SETTINGS.directImport).toBe(false);
-			// Reset for other tests
-			DEFAULT_SETTINGS.directImport = original.directImport;
+			expect(() => {
+				(DEFAULT_SETTINGS as any).directImport = false;
+			}).toThrow();
+			expect(DEFAULT_SETTINGS.directImport).toBe(true);
 		});
 	});
 

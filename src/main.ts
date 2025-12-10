@@ -4,6 +4,7 @@ import { CameraPluginSettings, DEFAULT_SETTINGS } from './settings';
 
 export default class AndroidCameraPlugin extends Plugin {
 	settings!: CameraPluginSettings;
+	private startupNoticeTimeout?: number;
 
 	async onload() {
 		await this.loadSettings();
@@ -14,7 +15,7 @@ export default class AndroidCameraPlugin extends Plugin {
 		if (!this.isMobileWithCamera()) {
 			console.log('obsidian-mobile-camera: Mobile platform with camera not detected, commands disabled');
 			// Show a one-time notice to inform users
-			setTimeout(() => {
+			this.startupNoticeTimeout = window.setTimeout(() => {
 				new Notice('Mobile Camera plugin requires a mobile device with camera support', 5000);
 			}, 2000);
 			return;
@@ -43,6 +44,9 @@ export default class AndroidCameraPlugin extends Plugin {
 	}
 
 	onunload() {
+		if (this.startupNoticeTimeout !== undefined) {
+			window.clearTimeout(this.startupNoticeTimeout);
+		}
 		console.log('obsidian-mobile-camera: Plugin unloaded');
 	}
 

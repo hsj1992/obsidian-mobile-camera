@@ -13,7 +13,14 @@ describe('CameraModal Path Resolution', () => {
 			notePath: string
 		): string => {
 			const folder = saveFolderTemplate.replace('{notepath}', notePath);
-			return normalizePath(folder) || 'Camera';
+			if (folder.startsWith('/') && !notePath) {
+				return 'Camera';
+			}
+			const normalized = normalizePath(folder).replace(/^\/+/, '');
+			if (!normalized || normalized.split('/').some((part) => part === '..')) {
+				return 'Camera';
+			}
+			return normalized;
 		};
 
 		it('should replace {notepath} with current note directory', () => {
@@ -21,10 +28,9 @@ describe('CameraModal Path Resolution', () => {
 			expect(result).toBe('daily/2024/image');
 		});
 
-		it('should handle root level notes', () => {
+		it('should handle root level notes by falling back to Camera', () => {
 			const result = resolveSaveFolder('{notepath}/image', '');
-			// When notepath is empty, result is '/image' which normalizes to '/image'
-			expect(result).toBe('/image');
+			expect(result).toBe('Camera');
 		});
 
 		it('should use absolute path when no {notepath}', () => {
@@ -41,16 +47,48 @@ describe('CameraModal Path Resolution', () => {
 			const result = resolveSaveFolder('{notepath}/attachments/images', 'projects/work');
 			expect(result).toBe('projects/work/attachments/images');
 		});
+
+		it('should block path traversal with ..', () => {
+			const result = resolveSaveFolder('../escape', 'daily/2024');
+			expect(result).toBe('Camera');
+		});
+
+		it('should block path traversal in template', () => {
+			const result = resolveSaveFolder('{notepath}/../../../etc', 'daily/2024');
+			expect(result).toBe('Camera');
+		});
+
+		it('should block absolute path with leading slash', () => {
+			const result = resolveSaveFolder('/absolute/path', 'daily/2024');
+			expect(result).toBe('absolute/path');
+		});
 	});
 
 	describe('ensureFolder', () => {
+		const ensureFolder = async (path: string, adapter: any) => {
+			if (!path || path.trim() === '') {
+				throw new Error('Invalid folder path');
+			}
+			const normalizedPath = normalizePath(path).replace(/^\/+/, '');
+			if (normalizedPath.split('/').some((part) => part === '..')) {
+				throw new Error('Invalid folder path');
+			}
+			const parts = normalizedPath.split('/').filter(Boolean);
+			let current = '';
+			for (const part of parts) {
+				current = current ? `${current}/${part}` : part;
+				if (!(await adapter.exists(current))) {
+					adapter.addFolder(current);
+				}
+			}
+		};
+
 		it('should create folder if it does not exist', async () => {
 			const path = 'test/folder';
 			const exists = await mockApp.vault.adapter.exists(path);
 			expect(exists).toBe(false);
 
-			await mockApp.vault.createFolder(path);
-			mockApp.vault.adapter.addFolder(path);
+			await ensureFolder(path, mockApp.vault.adapter);
 
 			const existsAfter = await mockApp.vault.adapter.exists(path);
 			expect(existsAfter).toBe(true);
@@ -66,11 +104,29 @@ describe('CameraModal Path Resolution', () => {
 
 		it('should throw error for invalid path', async () => {
 			const invalidPath = '';
-			expect(() => {
-				if (!invalidPath || invalidPath.trim() === '') {
-					throw new Error('Invalid folder path');
-				}
-			}).toThrow('Invalid folder path');
+			await expect(ensureFolder(invalidPath, mockApp.vault.adapter)).rejects.toThrow('Invalid folder path');
+		});
+
+		it('should create nested folders recursively', async () => {
+			const path = 'level1/level2/level3';
+			await ensureFolder(path, mockApp.vault.adapter);
+
+			expect(await mockApp.vault.adapter.exists('level1')).toBe(true);
+			expect(await mockApp.vault.adapter.exists('level1/level2')).toBe(true);
+			expect(await mockApp.vault.adapter.exists('level1/level2/level3')).toBe(true);
+		});
+
+		it('should block path traversal attempts', async () => {
+			const path = 'folder/../../../etc';
+			await expect(ensureFolder(path, mockApp.vault.adapter)).rejects.toThrow('Invalid folder path');
+		});
+
+		it('should handle paths with leading slashes', async () => {
+			const path = '/folder/subfolder';
+			await ensureFolder(path, mockApp.vault.adapter);
+
+			expect(await mockApp.vault.adapter.exists('folder')).toBe(true);
+			expect(await mockApp.vault.adapter.exists('folder/subfolder')).toBe(true);
 		});
 	});
 });

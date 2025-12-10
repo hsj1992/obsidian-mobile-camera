@@ -54,10 +54,34 @@ export class MockAdapter {
 
 export class MockModal {
 	app: any;
-	contentEl = document.createElement('div');
+	contentEl: any;
 
 	constructor(app: any) {
 		this.app = app;
+		this.contentEl = this.createMockElement();
+	}
+
+	private createMockElement() {
+		const addMethods = (el: any) => {
+			el.createEl = (tag: string, options?: any) => {
+				const child = document.createElement(tag);
+				if (options?.text) child.textContent = options.text;
+				if (options?.cls) child.className = options.cls;
+				if (options?.type) (child as any).type = options.type;
+				if (options?.value) (child as any).value = options.value;
+				addMethods(child);
+				el.appendChild(child);
+				return child;
+			};
+			el.createDiv = (options?: any) => {
+				return el.createEl('div', options);
+			};
+			el.empty = () => {
+				el.innerHTML = '';
+			};
+			return el;
+		};
+		return addMethods(document.createElement('div'));
 	}
 
 	open() {}
@@ -103,3 +127,19 @@ export const MockPlatform = {
 export function normalizePath(path: string): string {
 	return path.replace(/\\/g, '/').replace(/\/+/g, '/');
 }
+
+// Export as obsidian module
+export const App = MockApp;
+export const Modal = MockModal;
+export const MarkdownView = MockMarkdownView;
+export const Notice = MockNotice;
+export const Platform = MockPlatform;
+export const Plugin = class MockPlugin {};
+export const PluginSettingTab = class MockPluginSettingTab {};
+export const Setting = class MockSetting {
+	setName() { return this; }
+	setDesc() { return this; }
+	addText() { return this; }
+	addToggle() { return this; }
+};
+export const TFile = class MockTFile {};
