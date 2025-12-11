@@ -88,7 +88,7 @@ class CameraSettingTab extends PluginSettingTab {
 			});
 
 		new Setting(containerEl)
-			.setName('Direct import')
+			.setName('Auto-save photo')
 			.setDesc('If off, you will be prompted to rename the photo before saving')
 			.addToggle((toggle) =>
 				toggle
