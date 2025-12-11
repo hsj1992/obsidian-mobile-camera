@@ -11,10 +11,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '18'
 
@@ -39,19 +39,19 @@ jobs:
           generate_release_notes: true
 
       - name: Upload main.js
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: main.js
           path: main.js
 
       - name: Upload manifest.json
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: manifest.json
           path: manifest.json
 
       - name: Upload styles.css
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: styles.css
           path: styles.css
