@@ -149,6 +149,13 @@ export class CameraModal extends Modal {
 
 			if (decoded) {
 				this.insertText(decoded + '\n');
+				if (this.settings.copyQrToClipboard && navigator?.clipboard?.writeText) {
+					try {
+						await navigator.clipboard.writeText(decoded);
+					} catch {
+						// Clipboard access may be denied in some mobile WebViews
+					}
+				}
 				new Notice('QR code recognized');
 				this.close();
 			} else {

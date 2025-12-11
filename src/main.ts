@@ -98,5 +98,17 @@ class CameraSettingTab extends PluginSettingTab {
 						await this.plugin.saveSettings();
 					})
 			);
+
+		new Setting(containerEl)
+			.setName('Copy QR result to clipboard')
+			.setDesc('If on, recognized QR text is copied to the clipboard automatically')
+			.addToggle((toggle) =>
+				toggle
+					.setValue(this.plugin.settings.copyQrToClipboard)
+					.onChange(async (value) => {
+						this.plugin.settings.copyQrToClipboard = value;
+						await this.plugin.saveSettings();
+					})
+			);
 	}
 }
