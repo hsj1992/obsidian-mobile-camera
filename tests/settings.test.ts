@@ -6,6 +6,7 @@ describe('Settings', () => {
 			expect(DEFAULT_SETTINGS.saveFolderTemplate).toBe('{notepath}/image');
 			expect(DEFAULT_SETTINGS.directImport).toBe(true);
 			expect(DEFAULT_SETTINGS.copyQrToClipboard).toBe(false);
+			expect(DEFAULT_SETTINGS.photoNameTemplate).toBe('{YYYY}{MM}{DD}-{HH}{mm}{ss}{SSS}-{random}');
 		});
 
 		it('should be immutable', () => {
@@ -21,12 +22,14 @@ describe('Settings', () => {
 			const settings: CameraPluginSettings = {
 				saveFolderTemplate: 'custom/path',
 				directImport: false,
-				copyQrToClipboard: true
+				copyQrToClipboard: true,
+				photoNameTemplate: 'photo-{YYYY}{MM}{DD}'
 			};
 
 			expect(settings.saveFolderTemplate).toBe('custom/path');
 			expect(settings.directImport).toBe(false);
 			expect(settings.copyQrToClipboard).toBe(true);
+			expect(settings.photoNameTemplate).toBe('photo-{YYYY}{MM}{DD}');
 		});
 
 		it('should work with default settings', () => {

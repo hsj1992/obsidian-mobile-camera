@@ -100,6 +100,19 @@ class CameraSettingTab extends PluginSettingTab {
 			);
 
 		new Setting(containerEl)
+			.setName('Photo filename template')
+			.setDesc('Placeholders: {YYYY} {MM} {DD} {HH} {mm} {ss} {SSS} {random}')
+			.addText((text) => {
+				text
+					.setPlaceholder(DEFAULT_SETTINGS.photoNameTemplate)
+					.setValue(this.plugin.settings.photoNameTemplate)
+					.onChange(async (value) => {
+						this.plugin.settings.photoNameTemplate = value || DEFAULT_SETTINGS.photoNameTemplate;
+						await this.plugin.saveSettings();
+					});
+			});
+
+		new Setting(containerEl)
 			.setName('Copy QR result to clipboard')
 			.setDesc('If on, recognized QR text is copied to the clipboard automatically')
 			.addToggle((toggle) =>

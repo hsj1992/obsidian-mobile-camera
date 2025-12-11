@@ -6,9 +6,23 @@ export class FileService {
 
 	timestamp(): string {
 		const d = new Date();
-		const timestamp = `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}-${String(d.getHours()).padStart(2, '0')}${String(d.getMinutes()).padStart(2, '0')}${String(d.getSeconds()).padStart(2, '0')}${String(d.getMilliseconds()).padStart(3, '0')}`;
-		const random = Math.random().toString(36).substring(2, 6);
-		return `${timestamp}-${random}`;
+		const tokens: Record<string, string> = {
+			'{YYYY}': String(d.getFullYear()),
+			'{MM}': String(d.getMonth() + 1).padStart(2, '0'),
+			'{DD}': String(d.getDate()).padStart(2, '0'),
+			'{HH}': String(d.getHours()).padStart(2, '0'),
+			'{mm}': String(d.getMinutes()).padStart(2, '0'),
+			'{ss}': String(d.getSeconds()).padStart(2, '0'),
+			'{SSS}': String(d.getMilliseconds()).padStart(3, '0'),
+			'{random}': Math.random().toString(36).substring(2, 6)
+		};
+		const template = this.settings.photoNameTemplate || '{YYYY}{MM}{DD}-{HH}{mm}{ss}{SSS}-{random}';
+		let result = template;
+		for (const [key, value] of Object.entries(tokens)) {
+			result = result.split(key).join(value);
+		}
+		const sanitized = result.replace(/[/\\:*?"<>|]/g, '').replace(/\.{2,}/g, '');
+		return sanitized || `${tokens['{YYYY}']}${tokens['{MM}']}${tokens['{DD}']}-${tokens['{random}']}`;
 	}
 
 	async ensureFolder(path: string) {
