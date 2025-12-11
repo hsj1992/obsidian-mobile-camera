@@ -4,13 +4,14 @@
 
 An Obsidian plugin designed for mobile devices, providing camera photo capture and QR code recognition functionality.
 
+> **📱 Mobile Only**: This plugin is designed exclusively for mobile devices (Android). It will load silently on desktop without any errors or notifications, but all features are disabled. iOS support is not yet implemented.
+
 ## Features
 
 - 📷 **Take Photos**: Use the rear camera to take photos and insert them into notes
 - 🔍 **Capture QR Codes**: Take photos of QR codes and insert the recognized content into notes
 - 📁 **Flexible Storage**: Support for custom save path templates
-- ✏️ **File Naming**: Optional file rename prompt
-- 📱 **Mobile Only**: Currently supports Android devices (iOS support is not yet implemented)
+- ✏️ **File Naming**: Optional file rename prompt and customizable filename template
 
 ## Screenshots
 
@@ -114,9 +115,16 @@ You can configure the following in the plugin settings:
   - `{notepath}` will be replaced with the current note's directory
   - Examples: `Camera` or `{notepath}/attachments`
 
-- **Direct import**: Whether to import directly
-  - Enabled: Photos are saved directly after capture, using a timestamp as the filename
+- **Auto-save photo**: Whether to save photos automatically
+  - Enabled: Photos are saved directly after capture
   - Disabled: Prompt for a filename after taking a photo
+
+- **Photo filename template**: Customize the auto-generated filename
+  - Default: `{YYYY}{MM}{DD}-{HH}{mm}{ss}{SSS}-{random}`
+  - Placeholders: `{YYYY}` `{MM}` `{DD}` `{HH}` `{mm}` `{ss}` `{SSS}` `{random}`
+
+- **Copy QR result to clipboard**: Copy recognized QR text to clipboard
+  - Default: Off
 
 ## Privacy & Permissions
 
