@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Show a single accurate QR clipboard result and stop waiting after two seconds or modal closure.
 
 ### Changed
+- Compose the browser test environment with Jest's official abstract environment and jsdom 29, removing whatwg-encoding.
 - Migrate to ESLint 10 flat config and typescript-eslint 8 with typed source checks.
 - Update Jest 30 and ts-jest patches, remove old rimraf/glob/inflight dependencies and require Node.js 24 for development.
 - Replace legacy copied-logic tests with direct production service, modal, selection and lifecycle tests.

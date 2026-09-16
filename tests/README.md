@@ -63,7 +63,11 @@ When adding new functionality:
 ## Notes
 
 - Tests use Jest with ts-jest for TypeScript support
-- Jest and its jsdom environment use the same Jest 30 version; ts-jest uses its compatible 29.4 release.
+- Jest and `@jest/environment-jsdom-abstract` use matching Jest 30 versions;
+  ts-jest uses its compatible 29.4 release.
+- `environment/jsdom.cjs` composes Jest's official base environment with the project's
+  jsdom 29 dependency, avoiding the older built-in environment's deprecated encoding dependency.
+  See [Jest environment composition](https://jestjs.io/docs/test-environment#extending-built-in-environments).
 - jsdom environment is used to simulate browser APIs
 - Obsidian APIs are mocked to allow testing without the full Obsidian environment
 - Tests import production modules; do not copy their implementations into tests.

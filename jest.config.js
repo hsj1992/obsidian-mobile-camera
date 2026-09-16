@@ -1,6 +1,6 @@
 module.exports = {
 	preset: 'ts-jest',
-	testEnvironment: 'jsdom',
+	testEnvironment: '<rootDir>/tests/environment/jsdom.cjs',
 	roots: ['<rootDir>/src', '<rootDir>/tests'],
 	testMatch: ['**/__tests__/**/*.ts', '**/?(*.)+(spec|test).ts'],
 	moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
