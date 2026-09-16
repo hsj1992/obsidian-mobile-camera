@@ -1,5 +1,6 @@
-import { App, MarkdownView, TFile, normalizePath } from 'obsidian';
+import { App, TFile, normalizePath } from 'obsidian';
 import { CameraPluginSettings } from '../settings';
+import { sanitizeFilename } from './filename';
 
 export class FileService {
 	constructor(private app: App, private settings: CameraPluginSettings) {}
@@ -21,7 +22,7 @@ export class FileService {
 		for (const [key, value] of Object.entries(tokens)) {
 			result = result.split(key).join(value);
 		}
-		const sanitized = result.replace(/[/\\:*?"<>|]/g, '').replace(/\.{2,}/g, '');
+		const sanitized = sanitizeFilename(result);
 		return sanitized || `${tokens['{YYYY}']}${tokens['{MM}']}${tokens['{DD}']}-${tokens['{random}']}`;
 	}
 
@@ -44,9 +45,7 @@ export class FileService {
 		}
 	}
 
-	resolveSaveFolder(): string {
-		const view = this.app.workspace.getActiveViewOfType(MarkdownView);
-		const file = view?.file as TFile | undefined;
+	resolveSaveFolder(file: TFile): string {
 		const noteDir = file?.parent?.path ?? '';
 		const folder = (this.settings.saveFolderTemplate || '{notepath}/image')
 			.replace('{notepath}', noteDir);

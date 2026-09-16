@@ -1,9 +1,10 @@
 import { App, Platform, Plugin, PluginSettingTab, Setting } from 'obsidian';
 import { CameraModal } from './camera-modal';
-import { CameraPluginSettings, DEFAULT_SETTINGS } from './settings';
+import { CameraPluginSettings, DEFAULT_SETTINGS, parseSettings } from './settings';
 
 export default class AndroidCameraPlugin extends Plugin {
 	settings!: CameraPluginSettings;
+	private modals = new Set<CameraModal>();
 
 	async onload() {
 		await this.loadSettings();
@@ -11,7 +12,7 @@ export default class AndroidCameraPlugin extends Plugin {
 		// Always add settings tab for transparency
 		this.addSettingTab(new CameraSettingTab(this.app, this));
 
-		if (!this.isMobileWithCamera()) {
+		if (!Platform.isMobile) {
 			// Silently skip on desktop - this is a mobile-only plugin
 			return;
 		}
@@ -20,34 +21,38 @@ export default class AndroidCameraPlugin extends Plugin {
 			id: 'camera-main-menu',
 			name: 'Camera: Main Menu',
 			icon: 'camera',
-			callback: () => new CameraModal(this.app, this.settings).open()
+			callback: () => this.openCamera()
 		});
 
 		this.addCommand({
 			id: 'camera-take-photo',
 			name: 'Camera: Take Photo',
 			icon: 'camera',
-			callback: () => new CameraModal(this.app, this.settings, 'photo').open()
+			callback: () => this.openCamera('photo')
 		});
 
 		this.addCommand({
 			id: 'camera-scan-qr',
 			name: 'Camera: Capture QR Code',
 			icon: 'scan',
-			callback: () => new CameraModal(this.app, this.settings, 'qr').open()
+			callback: () => this.openCamera('qr')
 		});
 	}
 
-	onunload() {}
+	onunload() {
+		for (const modal of this.modals) modal.close();
+		this.modals.clear();
+	}
 
-	private isMobileWithCamera(): boolean {
-		if (typeof navigator === 'undefined') return false;
-		const hasMediaDevices = 'mediaDevices' in navigator || 'getUserMedia' in navigator;
-		return Platform.isMobile && hasMediaDevices;
+	private openCamera(action: 'photo' | 'qr' | null = null) {
+		if (this.modals.size) return;
+		const modal = new CameraModal(this.app, this.settings, action, () => this.modals.delete(modal));
+		this.modals.add(modal);
+		modal.open();
 	}
 
 	async loadSettings() {
-		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+		this.settings = parseSettings(await this.loadData());
 	}
 
 	async saveSettings() {

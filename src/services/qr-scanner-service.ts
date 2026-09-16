@@ -1,13 +1,19 @@
 import jsQR from 'jsqr';
 
+interface BarcodeDetectorConstructor {
+	new(options: { formats: string[] }): {
+		detect(image: HTMLImageElement): Promise<Array<{ rawValue: string }>>;
+	};
+}
+
 export class QrScannerService {
 	async scan(file: File): Promise<string | null> {
 		const image = await this.loadImageFromFile(file);
-		return await this.tryBarcodeDetector(image) ?? await this.decodeWithJsqr(image);
+		return await this.tryBarcodeDetector(image) ?? this.decodeWithJsqr(image);
 	}
 
 	private async tryBarcodeDetector(image: HTMLImageElement): Promise<string | null> {
-		const Detector = (window as any).BarcodeDetector;
+		const Detector = (window as Window & { BarcodeDetector?: BarcodeDetectorConstructor }).BarcodeDetector;
 		if (!Detector) return null;
 		try {
 			const detector = new Detector({ formats: ['qr_code'] });
@@ -18,7 +24,7 @@ export class QrScannerService {
 		}
 	}
 
-	private async decodeWithJsqr(image: HTMLImageElement): Promise<string | null> {
+	private decodeWithJsqr(image: HTMLImageElement): string | null {
 		const canvas = document.createElement('canvas');
 		const ctx = canvas.getContext('2d');
 		if (!ctx) throw new Error('No canvas context');

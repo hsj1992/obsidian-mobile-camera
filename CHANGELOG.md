@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+- Preserve the originating note and selection during photo capture and QR recognition.
+- Stop pending UI actions after closing the camera modal or unloading the plugin.
+- Build directly to `main.js` on all platforms, including watch mode on Windows.
+- Preserve Chinese photo names and remove unsafe filename and link characters.
+- Validate persisted settings and register mobile commands independently of mediaDevices.
+- Report clipboard failures and saved photos that could not be inserted.
+
+### Changed
+- Add production-code regression tests and resolve source lint errors.
+
 ## [1.0.0] - 2025-12-10
 
 ### Added

@@ -3,10 +3,15 @@
 export class MockApp {
 	workspace = new MockWorkspace();
 	vault = new MockVault();
+	fileManager = { generateMarkdownLink: (file: { path: string }) => `[[${file.path}]]` };
 }
 
 export class MockWorkspace {
 	private activeView: any = null;
+	views = new Set<any>();
+	iterateAllLeaves(callback: (leaf: any) => void) {
+		for (const view of this.views) callback({ view });
+	}
 
 	getActiveViewOfType(type: any) {
 		return this.activeView;
@@ -14,6 +19,7 @@ export class MockWorkspace {
 
 	setActiveView(view: any) {
 		this.activeView = view;
+		if (view) this.views.add(view);
 	}
 }
 
@@ -22,11 +28,14 @@ export class MockVault {
 	private files: Map<string, ArrayBuffer> = new Map();
 
 	async createBinary(path: string, data: ArrayBuffer) {
+		if (await this.adapter.exists(path)) throw new Error('File already exists');
 		this.files.set(path, data);
+		this.adapter.addFile(path);
 		return { path };
 	}
 
 	async createFolder(path: string) {
+		this.adapter.addFolder(path);
 		return { path };
 	}
 
@@ -79,13 +88,14 @@ export class MockModal {
 			el.empty = () => {
 				el.innerHTML = '';
 			};
+			el.addClass = (name: string) => el.classList.add(name);
 			return el;
 		};
 		return addMethods(document.createElement('div'));
 	}
 
-	open() {}
-	close() {}
+	open() { this.onOpen(); }
+	close() { this.onClose(); }
 	onOpen() {}
 	onClose() {}
 }
@@ -97,6 +107,11 @@ export class MockMarkdownView {
 
 export class MockEditor {
 	private content = '';
+	getValue() { return this.content; }
+	getCursor() { return { line: 0, ch: this.content.length }; }
+	replaceRange(text: string, from: { line: number; ch: number }, to: { line: number; ch: number }) {
+		this.content = this.content.slice(0, from.ch) + text + this.content.slice(to.ch);
+	}
 
 	replaceSelection(text: string) {
 		this.content += text;
