@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Show a single accurate QR clipboard result and stop waiting after two seconds or modal closure.
 
 ### Changed
+- Replace legacy copied-logic tests with direct production service, modal, selection and lifecycle tests.
 - Add production-code regression tests and resolve source lint errors.
 - Check lint, tests, builds and version metadata in Windows/Linux CI and before releases.
 - Require release tags to exactly match the manifest version and use locked dependency installs.

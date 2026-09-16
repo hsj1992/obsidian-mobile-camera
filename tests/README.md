@@ -18,8 +18,20 @@ npm run test:coverage
 ## Test Structure
 
 - **settings.test.ts** - Tests for plugin settings and configuration
-- **utils.test.ts** - Tests for utility functions (path normalization, filename sanitization, etc.)
-- **camera-modal.test.ts** - Tests for camera modal functionality (path resolution, file operations, platform detection)
+- **file-service.test.ts** - Production folder resolution, creation, filename conflicts and date templates
+- **filename.test.ts** - Production filename sanitization
+- **camera-modal.test.ts** - Real modal actions, capture inputs and cancellation
+- **main.test.ts** - Plugin loading, command registration, persistence and unloading
+- **note-target.test.ts** - Original selection and cursor insertion across view changes
+- **production.test.ts** - Async photo and QR flows across note switches and closure
+- **clipboard.test.ts** - Copy results, denied access, timeout and cancellation
+- **qr-scanner-service.test.ts** - Native, bitmap, pixel-worker and compatibility routing
+- **qr-worker-client.test.ts** - Worker transport, timeouts and termination
+- **qr-worker.test.ts** - Actual jsQR decoding using a fixed reference matrix
+- **rename-modal.test.ts** - Rename, save and cancel behavior
+
+Release validation uses Node's test runner outside Jest:
+`npm run test:release`. Run `npm run check` for all quality checks.
 
 ## Test Coverage
 
@@ -29,8 +41,8 @@ Current test coverage focuses on:
 - Filename sanitization (security)
 - Unique filename generation (conflict handling)
 - Timestamp generation
-- Platform detection logic
-- File operations (mocked)
+- Actual plugin command registration on mobile and desktop
+- Async file-saving and note-insertion behavior
 
 ## Mocks
 
@@ -53,4 +65,7 @@ When adding new functionality:
 - Tests use Jest with ts-jest for TypeScript support
 - jsdom environment is used to simulate browser APIs
 - Obsidian APIs are mocked to allow testing without the full Obsidian environment
-- Platform and navigator globals are mocked in `setup.ts`
+- Tests import production modules; do not copy their implementations into tests.
+- Mock external Obsidian and browser boundaries only, and restore modified browser APIs.
+- Each browser-routing test defines the capabilities it needs. setup.ts only adds DOM matchers.
+- Coverage does not replace Android/iOS testing; mock behavior can differ from real Obsidian.

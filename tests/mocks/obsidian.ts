@@ -14,7 +14,7 @@ export class MockWorkspace {
 	}
 
 	getActiveViewOfType(type: any) {
-		return this.activeView;
+		return this.activeView instanceof type ? this.activeView : null;
 	}
 
 	setActiveView(view: any) {
@@ -107,14 +107,25 @@ export class MockMarkdownView {
 
 export class MockEditor {
 	private content = '';
+	private from = { line: 0, ch: 0 };
+	private to = { line: 0, ch: 0 };
 	getValue() { return this.content; }
-	getCursor() { return { line: 0, ch: this.content.length }; }
+	getCursor(which: 'from' | 'to' = 'to') { return { ...this[which] }; }
+	setSelection(from: { line: number; ch: number }, to = from) {
+		this.from = { ...from }; this.to = { ...to };
+	}
+	private offset(position: { line: number; ch: number }) {
+		return this.content.split('\n').slice(0, position.line).reduce((length, line) => length + line.length + 1, 0) + position.ch;
+	}
 	replaceRange(text: string, from: { line: number; ch: number }, to: { line: number; ch: number }) {
-		this.content = this.content.slice(0, from.ch) + text + this.content.slice(to.ch);
+		const start = this.offset(from), end = this.offset(to);
+		this.content = this.content.slice(0, start) + text + this.content.slice(end);
+		const lines = this.content.slice(0, start + text.length).split('\n');
+		this.setSelection({ line: lines.length - 1, ch: lines[lines.length - 1].length });
 	}
 
 	replaceSelection(text: string) {
-		this.content += text;
+		this.replaceRange(text, this.from, this.to);
 	}
 
 	getContent() {
@@ -151,8 +162,19 @@ export const Modal = MockModal;
 export const MarkdownView = MockMarkdownView;
 export const Notice = MockNotice;
 export const Platform = MockPlatform;
-export const Plugin = class MockPlugin {};
-export const PluginSettingTab = class MockPluginSettingTab {};
+export class MockPlugin {
+	commands: Array<{ id: string; callback: () => void }> = [];
+	settingTabs: unknown[] = [];
+	loadData = jest.fn().mockResolvedValue(null);
+	saveData = jest.fn().mockResolvedValue(undefined);
+	constructor(public app: MockApp) {}
+	addCommand(command: { id: string; callback: () => void }) { this.commands.push(command); }
+	addSettingTab(tab: unknown) { this.settingTabs.push(tab); }
+}
+export const Plugin = MockPlugin;
+export const PluginSettingTab = class MockPluginSettingTab {
+	constructor(public app: MockApp, public plugin: MockPlugin) {}
+};
 export const Setting = class MockSetting {
 	setName() { return this; }
 	setDesc() { return this; }
