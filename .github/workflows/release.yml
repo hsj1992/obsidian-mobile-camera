@@ -1,6 +1,13 @@
 name: Release Obsidian Plugin
 
 on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to validate (manual runs do not publish a release)'
+        required: true
+        default: '1.0.0'
+        type: string
   push:
     tags:
       - '*'
@@ -25,10 +32,16 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Validate intended release tag
+        env:
+          RELEASE_TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.version || github.ref_name }}
+        run: node scripts/validate-release.mjs "$RELEASE_TAG"
+
       - name: Validate release, test and build
         run: npm run check
 
       - name: Create Release
+        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
         id: create_release
         uses: softprops/action-gh-release@v2
         env:
@@ -48,15 +61,18 @@ jobs:
         with:
           name: main.js
           path: main.js
+          if-no-files-found: error
 
       - name: Upload manifest.json
         uses: actions/upload-artifact@v4
         with:
           name: manifest.json
           path: manifest.json
+          if-no-files-found: error
 
       - name: Upload styles.css
         uses: actions/upload-artifact@v4
         with:
           name: styles.css
           path: styles.css
+          if-no-files-found: error

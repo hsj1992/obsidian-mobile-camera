@@ -54,6 +54,11 @@ The tag must exactly match the manifest version, without a leading `v`.
 The release workflow runs the complete checks before publishing and fails if a
 required asset is missing.
 
+To verify the release workflow without publishing, run **Release Obsidian Plugin**
+from GitHub Actions with the intended version. Manual runs validate the exact
+version, run all checks and upload the three release artifacts. Only tag pushes
+create a GitHub Release.
+
 ## Code Style
 
 `npm run lint` uses `eslint.config.mjs` (ESLint flat config) and type-aware
