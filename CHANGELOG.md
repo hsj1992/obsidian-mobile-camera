@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Fixed
+- Normalize non-Error browser promise rejections while preserving existing Error objects.
 - Preserve the originating note and selection during photo capture and QR recognition.
 - Stop pending UI actions after closing the camera modal or unloading the plugin.
 - Build directly to `main.js` on all platforms, including watch mode on Windows.
@@ -19,6 +20,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Show a single accurate QR clipboard result and stop waiting after two seconds or modal closure.
 
 ### Changed
+- Migrate to ESLint 10 flat config and typescript-eslint 8 with typed source checks.
+- Update Jest 30 and ts-jest patches, remove old rimraf/glob/inflight dependencies and require Node.js 24 for development.
 - Replace legacy copied-logic tests with direct production service, modal, selection and lifecycle tests.
 - Add production-code regression tests and resolve source lint errors.
 - Check lint, tests, builds and version metadata in Windows/Linux CI and before releases.

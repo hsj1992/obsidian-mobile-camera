@@ -56,6 +56,11 @@ required asset is missing.
 
 ## Code Style
 
+`npm run lint` uses `eslint.config.mjs` (ESLint flat config) and type-aware
+typescript-eslint rules for `src/**/*.ts`. Generated bundles, coverage output and
+dependencies are ignored. Use the project's installed tools rather than a global
+ESLint installation. Node.js 24 is required for the development toolchain.
+
 - Use TypeScript strict mode
 - Follow existing code formatting
 - Use meaningful variable and function names

@@ -27,6 +27,9 @@ export function waitForScan<T>(promise: Promise<T>, signal: AbortSignal | undefi
 		const abort = () => { cleanup(); reject(new DOMException('QR scan cancelled', 'AbortError')); };
 		const timer = window.setTimeout(() => { cleanup(); reject(new Error('QR detection timed out')); }, timeout);
 		signal?.addEventListener('abort', abort, { once: true });
-		promise.then((value) => { cleanup(); resolve(value); }, (error: unknown) => { cleanup(); reject(error); });
+		promise.then((value) => { cleanup(); resolve(value); }, (error: unknown) => {
+			cleanup();
+			reject(error instanceof Error ? error : new Error(typeof error === 'string' ? error : 'QR operation failed'));
+		});
 	});
 }
