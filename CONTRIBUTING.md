@@ -5,7 +5,7 @@ Thank you for your interest in contributing! This document provides guidelines f
 ## Development Setup
 
 ### Prerequisites
-- Node.js 18 or higher
+- Node.js 24 (the version used in CI)
 - npm
 - An Obsidian vault for testing
 
@@ -19,7 +19,7 @@ cd obsidian-mobile-camera
 
 2. Install dependencies
 ```bash
-npm install
+npm ci
 ```
 
 3. Build the plugin
@@ -36,11 +36,23 @@ npm run dev
 
 To test your changes:
 
-1. Copy `main.js` and `manifest.json` to your vault's `.obsidian/plugins/mobile-camera/` directory
+Run `npm run check` to validate release metadata, lint the source, run both test
+suites, and build the plugin. CI runs this command on Windows and Linux.
+
+1. Copy `main.js`, `manifest.json`, and `styles.css` to your vault's `.obsidian/plugins/mobile-camera-qr-plugin/` directory
 2. Reload Obsidian
 3. Enable the plugin in Settings → Community Plugins
 
 For mobile testing, you'll need to test on an actual Android device with Obsidian mobile installed.
+
+### Release checks
+
+Keep the versions in `package.json` and `manifest.json` identical. Map that version
+to `manifest.minAppVersion` in `versions.json`. Before creating a release tag, run
+`npm run validate:release -- 1.0.0`, substituting the intended version.
+The tag must exactly match the manifest version, without a leading `v`.
+The release workflow runs the complete checks before publishing and fails if a
+required asset is missing.
 
 ## Code Style
 
@@ -68,7 +80,7 @@ For mobile testing, you'll need to test on an actual Android device with Obsidia
 
 1. Update documentation if needed
 2. Add your changes to CHANGELOG.md under "Unreleased"
-3. Ensure the code builds without errors (`npm run build`)
+3. Ensure all checks pass (`npm run check`)
 4. Test on mobile if possible
 5. Submit a pull request with a clear description
 

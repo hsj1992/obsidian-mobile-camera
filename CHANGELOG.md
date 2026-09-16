@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Add production-code regression tests and resolve source lint errors.
+- Check lint, tests, builds and version metadata in Windows/Linux CI and before releases.
+- Require release tags to exactly match the manifest version and use locked dependency installs.
 
 ## [1.0.0] - 2025-12-10
 
