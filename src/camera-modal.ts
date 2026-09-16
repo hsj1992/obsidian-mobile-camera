@@ -18,6 +18,7 @@ export class CameraModal extends Modal {
 	private busy = false;
 	private launchTimer?: number;
 	private renameModal?: RenameModal;
+	private qrAbort = new AbortController();
 
 	constructor(app: App, settings: CameraPluginSettings, initialAction: 'photo' | 'qr' | null = null, private onDismiss?: () => void) {
 		super(app);
@@ -153,6 +154,7 @@ export class CameraModal extends Modal {
 	private cancelPendingWork() {
 		if (this.closed) return;
 		this.closed = true;
+		this.qrAbort.abort();
 		window.clearTimeout(this.launchTimer);
 		this.renameModal?.close();
 	}
@@ -178,7 +180,7 @@ export class CameraModal extends Modal {
 		this.busy = true;
 
 		try {
-			const decoded = await this.qrService.scan(file);
+			const decoded = await this.qrService.scan(file, this.qrAbort.signal);
 			if (this.closed) return;
 
 			if (decoded) {

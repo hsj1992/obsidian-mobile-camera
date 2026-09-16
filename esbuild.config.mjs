@@ -1,6 +1,7 @@
 import esbuild from "esbuild";
 import process from "process";
 import builtins from "builtin-modules";
+import path from "node:path";
 
 const banner =
 `/*
@@ -39,6 +40,27 @@ const context = await esbuild.context({
 	treeShaking: true,
 	outfile: "main.js",
 	minify: prod,
+	plugins: [{
+		name: "embedded-worker",
+		setup(build) {
+			build.onResolve({ filter: /\?worker$/ }, args => ({
+				path: path.resolve(args.resolveDir, args.path.replace(/\?worker$/, ".ts")),
+				namespace: "embedded-worker",
+			}));
+			build.onLoad({ filter: /.*/, namespace: "embedded-worker" }, async args => {
+				const worker = await esbuild.build({
+					entryPoints: [args.path], bundle: true, write: false,
+					format: "iife", platform: "browser", target: "es2018",
+					minify: true, metafile: true,
+				});
+				return {
+					contents: `export default ${JSON.stringify(worker.outputFiles[0].text)}`,
+					loader: "js",
+					watchFiles: Object.keys(worker.metafile.inputs).map(file => path.resolve(file)),
+				};
+			});
+		},
+	}],
 });
 
 if (prod) {

@@ -5,6 +5,7 @@ module.exports = {
 	testMatch: ['**/__tests__/**/*.ts', '**/?(*.)+(spec|test).ts'],
 	moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
 	moduleNameMapper: {
+		'\\?worker$': '<rootDir>/tests/mocks/worker-source.ts',
 		'^obsidian$': '<rootDir>/tests/mocks/obsidian.ts'
 	},
 	collectCoverageFrom: [

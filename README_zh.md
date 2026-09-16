@@ -178,9 +178,15 @@ npm run build
 插件使用双重策略从照片中识别二维码：
 
 1. 优先使用原生 `BarcodeDetector` API（如果浏览器支持）
-2. 回退到 jsQR 库进行多尺度图像处理
+2. 在本地 Web Worker 中使用 jsQR 进行多尺度解码；支持 OffscreenCanvas 时，
+   图片缩放和像素读取也在 Worker 中完成。
 
-这确保了在不同设备上的最佳兼容性和性能。
+关闭相机弹窗会取消扫描并终止 Worker。原生识别、图片加载和 Worker 解码均有超时限制。
+Worker 已嵌入 `main.js`，无需额外发布文件，也不会产生网络请求。
+
+不支持 OffscreenCanvas 的 WebView 会将缩放后的像素传给 Worker。
+如果 Worker 被禁止或不可用，则使用最长边不超过 600 像素的主线程兼容回退，
+并在各次尝试之间让出执行时间。此时密集或较小的二维码可能更难识别，复杂图片仍可能短暂卡顿。
 
 ## License
 

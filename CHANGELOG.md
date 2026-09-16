@@ -14,11 +14,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Preserve Chinese photo names and remove unsafe filename and link characters.
 - Validate persisted settings and register mobile commands independently of mediaDevices.
 - Report clipboard failures and saved photos that could not be inserted.
+- Decode QR images in a cancellable local worker, with offscreen scaling on supported devices.
+- Bound native detection, image loading and worker decoding with timeouts.
 
 ### Changed
 - Add production-code regression tests and resolve source lint errors.
 - Check lint, tests, builds and version metadata in Windows/Linux CI and before releases.
 - Require release tags to exactly match the manifest version and use locked dependency installs.
+- Embed the QR worker in the existing main.js release artifact and retain a bounded compatibility fallback.
 
 ## [1.0.0] - 2025-12-10
 

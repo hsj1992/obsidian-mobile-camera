@@ -178,9 +178,17 @@ This project uses esbuild as the build tool, which is faster and lighter than tr
 The plugin uses a dual strategy for QR code recognition from photos:
 
 1. Prioritizes the native `BarcodeDetector` API (if the browser supports it)
-2. Falls back to the jsQR library for multi-scale image processing
+2. Runs jsQR multi-scale decoding in a local Web Worker. When supported,
+   OffscreenCanvas also handles image scaling and pixel reads in the worker.
 
-This ensures optimal compatibility and performance across different devices.
+Closing the camera modal cancels the scan and terminates its worker. Native detection,
+image loading and worker decoding have timeouts. The worker is bundled into `main.js`;
+no extra release file or network request is required.
+
+WebViews without OffscreenCanvas transfer scaled pixels to the worker. If workers are
+blocked or unavailable, the plugin retains a main-thread compatibility path with a
+600-pixel maximum dimension and yields between scales. Dense or small QR codes may
+be harder to recognize in that path, and complex images can still cause brief pauses.
 
 ## License
 
