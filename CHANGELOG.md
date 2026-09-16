@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Report clipboard failures and saved photos that could not be inserted.
 - Decode QR images in a cancellable local worker, with offscreen scaling on supported devices.
 - Bound native detection, image loading and worker decoding with timeouts.
+- Show a single accurate QR clipboard result and stop waiting after two seconds or modal closure.
 
 ### Changed
 - Add production-code regression tests and resolve source lint errors.

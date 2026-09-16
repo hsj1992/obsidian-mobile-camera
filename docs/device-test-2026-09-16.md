@@ -31,9 +31,11 @@ marked synchronously in `close`, preventing late results during that animation.
 A regression test simulates delayed `onClose`, and the updated bundle was verified
 again on the device.
 
-## Not separately verified
+## Clipboard follow-up
 
-- Clipboard copying and feedback when Android denies clipboard access.
+Real copying and failure handling have since been verified in the live device's
+WebView. Denial was injected as NotAllowedError, without changing Android's actual
+permission settings. See [clipboard verification](clipboard-test-2026-09-16.md).
 
 The generated-file checks verify the real WebView and plugin processing paths;
 native camera integration was additionally confirmed by the user's physical tests.

@@ -5,6 +5,7 @@ import { FileService } from './services/file-service';
 import { QrScannerService } from './services/qr-scanner-service';
 import { NoteTarget } from './services/note-target';
 import { sanitizeFilename } from './services/filename';
+import { copyQrText } from './services/clipboard-service';
 
 export class CameraModal extends Modal {
 	private settings: CameraPluginSettings;
@@ -185,16 +186,14 @@ export class CameraModal extends Modal {
 
 			if (decoded) {
 				this.target.insert(decoded + '\n');
+				let message = 'QR code recognized';
 				if (this.settings.copyQrToClipboard) {
-					try {
-						if (!navigator.clipboard?.writeText) throw new Error('Clipboard unavailable');
-						await navigator.clipboard.writeText(decoded);
-					} catch {
-						if (!this.closed) new Notice('QR text inserted, but could not be copied to the clipboard');
-					}
+					const copied = await copyQrText(decoded, this.qrAbort.signal);
+					message = copied ? 'QR text inserted and copied to clipboard'
+						: 'QR text inserted, but could not be copied to the clipboard';
 				}
 				if (this.closed) return;
-				new Notice('QR code recognized');
+				new Notice(message);
 				this.close();
 			} else {
 				new Notice('No QR code found in photo. Please try again.');

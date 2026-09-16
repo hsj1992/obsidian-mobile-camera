@@ -185,6 +185,11 @@ Closing the camera modal cancels the scan and terminates its worker. Native dete
 image loading and worker decoding have timeouts. The worker is bundled into `main.js`;
 no extra release file or network request is required.
 
+If automatic clipboard copying is enabled, a failed or unavailable clipboard does
+not undo inserted QR text. The plugin shows one copy result and stops waiting after
+two seconds or when the modal closes. An already-started system clipboard write
+cannot be revoked and may still complete later.
+
 WebViews without OffscreenCanvas transfer scaled pixels to the worker. If workers are
 blocked or unavailable, the plugin retains a main-thread compatibility path with a
 600-pixel maximum dimension and yields between scales. Dense or small QR codes may

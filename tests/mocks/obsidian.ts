@@ -123,10 +123,12 @@ export class MockEditor {
 }
 
 export class MockNotice {
+	static messages: string[] = [];
 	message: string;
 	duration: number;
 
 	constructor(message: string, duration = 5000) {
+		MockNotice.messages.push(message);
 		this.message = message;
 		this.duration = duration;
 	}
